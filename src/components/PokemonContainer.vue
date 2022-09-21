@@ -9,8 +9,8 @@
 
 				<div v-if="loadedMonData" class="mr-1 align-center d-flex">
 					<div v-for="item in getMonData.types" :key="item.type.name[pokemon.pokemon_species.name]">
-					<v-card class="justify-center ma-2 pa-2 d-flex" min-width="75" :color="item.type.name">
-						{{ capitalize(item.type.name) }}
+						<v-card class="justify-center ma-2 pa-2 d-flex" min-width="75" :color="item.type.name">
+							{{ capitalize(item.type.name) }}
 					</v-card>
 					</div>
 				</div>
@@ -21,6 +21,12 @@
 			<v-row class="ma-2" v-if="loadedMonData">
 				<v-col cols="6" v-for="stats in getMonData.stats" :key="stats.stat.name[pokemon.pokemon_species.name]">
 					{{ capitalize(stats.stat.name).replace("-", " ") }}: {{ stats.base_stat }}
+				</v-col>
+				<v-col cols="6">
+					Height: {{ getMonData.height / 10 }}m
+				</v-col>
+				<v-col cols="6">
+					Weight: {{ getMonData.weight / 10 }}kg
 				</v-col>
 			</v-row>
 			<v-btn @click="expand = !expand" tile class="pokemonShowBtn">Show {{ expand ? "less" : "more" }} info</v-btn>
@@ -76,11 +82,26 @@
 			<v-expansion-panel/>
 
 			<v-expansion-panel>
+				<v-expansion-panel-header>Abilities</v-expansion-panel-header>
+				<v-expansion-panel-content>
+					<v-row v-if="loadedMonData">
+						<v-col cols="6" v-for="abilities in getMonData.abilities" :key="abilities.ability.name[pokemon.entry_number]">
+							<AbilityContainer
+								:abilityId="Number(abilities.ability.url.slice(34, -1))"
+							/>
+						</v-col>
+					</v-row>
+				</v-expansion-panel-content>
+			</v-expansion-panel>
+
+			<v-expansion-panel>
 				<v-expansion-panel-header>Available moves</v-expansion-panel-header>
 				<v-expansion-panel-content>
 					<v-row v-if="loadedMonData">
 						<v-col cols="4" v-for="moves in getMonData.moves" :key="moves[pokemon.entry_number]">
-							<v-card outlined class="justify-center pa-2 d-flex">{{ capitalize(moves.move.name).replace("-", " ") }}</v-card>
+							<MoveContainer
+								:moveId="Number(moves.move.url.slice(31, -1))"
+							/>
 						</v-col>
 					</v-row>
 				</v-expansion-panel-content>
@@ -92,15 +113,17 @@
 
 <script>
 import axios from "axios"
+import MoveContainer from "@/components/MoveContainer.vue";
+import AbilityContainer from "@/components/AbilityContainer.vue";
 
 export default {
-	name: "Container",
+	name: "PokemonContainer",
 
 	data: () => ({
 		expand: false,
 		pokemonImgBack: false,
 		pokemonImgShiny: false,
-		
+
 		// axios
 		getMonData: null,
 		loadedMonData: false,
@@ -117,21 +140,26 @@ export default {
 
 	methods: {
 		capitalize(string) {
-			return string.charAt(0).toUpperCase() + string.slice(1)
+			return string.charAt(0).toUpperCase() + string.slice(1);
 		},
 
 		getPokemon() {
 			axios
-				.get(`https://pokeapi.co/api/v2/pokemon/${ this.pokemonId }/`)
+				.get(`https://pokeapi.co/api/v2/pokemon/${this.pokemonId}/`)
 				.then((response) => {
-					this.getMonData = response.data
-					this.loadedMonData = true
+					this.getMonData = response.data;
+					this.loadedMonData = true;
 				})
 				.catch((error) => {
-					console.error(error)
-				})
+					console.error(error);
+				});
 		}
-	}
+	},
+	
+	components: {
+		MoveContainer,
+		AbilityContainer,
+	},
 }
 </script>
 

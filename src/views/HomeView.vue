@@ -3,7 +3,7 @@
 	<v-app-bar>
 		<v-app-bar-nav-icon @click="drawer = true"/>
 
-		<v-toolbar-title v-if="loadedMonData">{{ capitalize(getMonData.name) }} Pokedex</v-toolbar-title>
+		<v-toolbar-title v-if="loadedMonData">{{ capitalize(getMonData.name).replace("-", " ") }} Pokedex</v-toolbar-title>
 		
 		<v-spacer/>
 
@@ -36,23 +36,29 @@
 		bottom
 		temporary
 	>
-		<v-list v-if="loadedDexData" dense rounded>
+		<v-list v-if="loadedDexData" dense>
 			<v-list-item-content>
-				<v-list-item-title>Pokedex</v-list-item-title>
+				<v-list-item-title class="justify-center d-flex">Pokedex</v-list-item-title>
 			</v-list-item-content>
 
 			<v-divider/>
 
-			<v-list-item v-for="item in getDexData.results" :key="item.name">
-				<v-btn @click="pokedexId = Number(item.url.slice(34, -1))">{{ item.name }}</v-btn>
-			</v-list-item>
+			<v-expansion-panels tile accordion>
+				<v-expansion-panel v-for="results in getDexData.results" :key="results.name">
+					<v-list-item link
+						@click="pokedexId = Number(results.url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer"
+					>
+						<v-list-item-title>{{ capitalize(results.name) }}</v-list-item-title>
+					</v-list-item>
+				</v-expansion-panel>
+			</v-expansion-panels>
 		</v-list>
 	</v-navigation-drawer>
 
 	<v-row>
 		<v-spacer/>
 		<v-col v-if="loadedMonData">
-			<Container
+			<PokemonContainer
 				v-for="pokemon in getMonData.pokemon_entries.slice(startSlice, endSlice)"
 				:key="pokemon.pokemon_species.name"
 				:pokemonId="Number(pokemon.pokemon_species.url.slice(42, -1))"
@@ -76,7 +82,7 @@
 
 <script>
 import axios from "axios";
-import Container from "@/components/Container.vue";
+import PokemonContainer from "@/components/PokemonContainer.vue";
 
 export default {
 	name: "HomeView",
@@ -159,7 +165,7 @@ export default {
 	},
 
 	components: {
-		Container,
+		PokemonContainer,
 	}
 }
 </script>
