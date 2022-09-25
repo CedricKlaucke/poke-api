@@ -176,7 +176,7 @@ export default {
 }
 
 .pokemonShowBtn {
-	position: absolute;
+	position: absolute !important;
 	top: 280px;
 }
 </style>
