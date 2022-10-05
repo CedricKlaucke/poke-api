@@ -1,5 +1,5 @@
 <template>
-<v-card outlined shaped width="1000" min-height="334" class="overflow-hidden ma-4">
+<v-card outlined shaped min-height="334" class="overflow-hidden ma-4">
 	<v-row no-gutters>
 		<v-col cols="8" min-height="334">
 			<v-row no-gutters height="64">

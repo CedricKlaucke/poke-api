@@ -39,7 +39,11 @@
 				</v-row>
 
 				<v-list-item class="mt-2">
-					<v-slider hide-details min="1" max="25" v-model="numberShown" />
+					<v-slider hide-details
+						v-model="numberShown"
+						min="1"
+						max="25"
+					/>
 				</v-list-item>
 			</v-list>
 		</v-menu>
@@ -51,198 +55,57 @@
 		bottom
 		temporary
 	>
-		<v-expansion-panels v-if="loadedDexData" tile accordion>
-			<v-expansion-panel class="d-flex justify-center">
-				<v-card-title>Pokedex version</v-card-title>
-			</v-expansion-panel>
 
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[0].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>National</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Kanto</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[1].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Kanto</v-card-text>
-					</v-btn>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[24].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Let's Go Kanto</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Johto</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[2].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Johto</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[6].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Johto</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Hoenn</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[3].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Hoenn</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[13].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Hoenn</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Sinnoh</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[4].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Sinnoh</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[5].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Extended Sinnoh</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Unova</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[7].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Unova</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[8].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Unova</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[9].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>Conquest Gallery</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Kalos</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[10].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Kalos Central</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[11].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Kalos Coastal</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[12].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Kalos Mountain</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Alola</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[14].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Alola</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[19].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Alola</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Melemele</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[15].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Melemele</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[20].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Melemele</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Akala</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[16].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Akala</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[21].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Akala</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Ulaula</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[17].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Ulaula</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[22].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Ulaula</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-expansion-panel-header>Poni</v-expansion-panel-header>
-				<v-expansion-panel-content>
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[18].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Original Poni</v-card-text>
-					</v-btn>
-
-					<v-btn class="text-none text-left pl-0" block text @click="pokedexId = Number(getDexData.results[23].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-						<v-card-text>Updated Poni</v-card-text>
-					</v-btn>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[25].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>Galar</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[26].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>Isle of Armor</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[27].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>Crown Tundra</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-
-			<v-expansion-panel>
-				<v-btn class="text-none text-left pl-0 my-2" block text @click="pokedexId = Number(getDexData.results[28].url.slice(34, -1)); getPokemon(); page = 1; drawer = !drawer">
-					<v-card-text>Hisui</v-card-text>
-				</v-btn>
-			</v-expansion-panel>
-		</v-expansion-panels>
+		<v-list shaped v-if="loadedDexData">
+			<div v-for="(pokedex, index) in pokedexMenu" :key="'menu ' + pokedex.name">
+				<v-list-item
+					v-if="pokedex.path"
+					@click="
+						pokedexId = pokedex.path;		// sets the ID for the pokedex
+						getPokemon();								// update axios
+						drawer = !drawer;						// closes the drawer
+						page = 1;
+					"
+				>
+					<v-card tile flat width="3px" class="ml-1 mr-5"
+						:color="pokedexMenuColor(pokedex.path)"
+						:class="pokedexMenuBorder(index)"
+					/>
+					<v-list-item-title>{{ pokedex.name }}</v-list-item-title>
+				</v-list-item>
+				<v-list-group v-if="pokedex.child" :value="false">
+					<template #activator>
+						<v-card tile flat width="3px" class="ml-1 mr-5"
+							:color="pokedexMenuGroupColor(pokedex.child) ? 'primary' : 'grey'"
+							:class="pokedexMenuBorder(index)"
+						/>
+						<v-list-item-content>
+							<v-list-item-title>{{ pokedex.name }}</v-list-item-title>
+						</v-list-item-content>
+					</template>
+					<v-list-item
+						v-for="(child, indexChild) in pokedex.child" :key="'menu' + child.name"
+						@click="
+							pokedexId = child.path;		// sets the ID for the pokedex
+							getPokemon();							// update axios
+							drawer = !drawer;					// closes the drawer
+							page = 1;
+						"
+					>
+						<v-card tile flat class="ml-2 mr-6" width="3px"
+							:color="pokedexMenuColor(child.path)"
+							:class="pokedexMenuBorder(index, indexChild)"
+						/>
+						<v-list-item-title>{{ child.name }}</v-list-item-title>
+					</v-list-item>
+				</v-list-group>
+			</div>
+		</v-list>
 	</v-navigation-drawer>
 
 	<v-row>
 		<v-spacer/>
-		<v-col v-if="loadedMonData">
+		<v-col cols="10" v-if="loadedMonData">
 			<PokemonContainer
 				v-for="pokemon in getMonData.pokemon_entries.slice(startSlice, endSlice)"
 				:key="pokemon.pokemon_species.name"
@@ -280,15 +143,71 @@ export default {
 		pokemonImgBack: false,
 		pokemonImgShiny: false,
 		pokedexId: 1,
+
+		// pokedex menu data
+		pokedexMenu: [
+			{ name: "National", path: 1 },
+			{ name: "Kanto", child: [
+				{ name: "Kanto", path: 2 },
+				{ name: "Let's Go Kanto", path: 26 },
+			]},
+			{ name: "Johto", child: [
+				{ name: "Original Johto", path: 3 },
+				{ name: "Updated Johto", path: 7 },
+			]},
+			{ name: "Hoenn", child: [
+				{ name: "Original Hoenn", path: 4 },
+				{ name: "Updated Hoenn", path: 15 },
+			]},
+			{ name: "Sinnoh", child: [
+				{ name: "Original Sinnoh", path: 5 },
+				{ name: "Extended Sinnoh", path: 6 },
+			]},
+			{ name: "Unova", child: [
+				{ name: "Original Unova", path: 8 },
+				{ name: "Updated Unova", path: 9 },
+			]},
+			{ name: "Kalos", child: [
+				{ name: "Kalos Central", path: 12 },
+				{ name: "Kalos Coastal", path: 13 },
+				{ name: "Kalos Mountain", path: 14 },
+			]},
+			{ name: "Alola", child: [
+				{ name: "Original Alola", path: 16 },
+				{ name: "Updated Alola", path: 21 },
+			]},
+			{ name: "Melemele", child: [
+				{ name: "Original Melemele", path: 17 },
+				{ name: "Updated Melemele", path: 22 },
+			]},
+			{ name: "Akala", child: [
+				{ name: "Original Akala", path: 18 },
+				{ name: "Updated Akala", path: 23 },
+			]},
+			{ name: "Ulaula", child: [
+				{ name: "Original Ulaula", path: 19 },
+				{ name: "Updated Ulaula", path: 24 },
+			]},
+			{ name: "Poni", child: [
+				{ name: "Original Poni", path: 20 },
+				{ name: "Updated Poni", path: 25 },
+			]},
+			{ name: "Galar", path: 27 },
+			{ name: "Conquest Gallery", path: 11 },
+			{ name: "Isle of Armor", path: 28 },
+			{ name: "Crown Tundra", path: 29 },
+			{ name: "Hisui", path: 30 },
+		],
 		
-		// axios
+		// axios placeholders
 		getDexData: null,
-		getMonData: null,
 		loadedDexData: false,
+		getMonData: null,
 		loadedMonData: false,
 	}),
 
 	computed: {
+		// gets the page numbers
 		pageNumbers() {
 			if (this.loadedMonData) {
 				return Math.ceil(this.getMonData.pokemon_entries.length / this.numberShown);
@@ -303,15 +222,55 @@ export default {
 	},
 
 	beforeMount() {
+		// get data on page load
 		this.getPokemon();
 		this.getPokedex();
 	},
 
 	methods: {
+		// sets the side menu borders based on first/last item
+		pokedexMenuBorder(index, indexChild) {
+			if (indexChild !== undefined ? this.pokedexMenu[index].child.length === 1 : this.pokedexMenu.length === 1) {
+				return "pokedexMenuBorderSolo";
+			} else if (indexChild !== undefined ? indexChild === 0 : index === 0) {
+				return "pokedexMenuBorderStart";
+			} else if (indexChild !== undefined ? indexChild === this.pokedexMenu[index].child.length - 1 : index === this.pokedexMenu.length - 1) {
+				return "pokedexMenuBorderEnd";
+			} else {
+				return "pokedexMenuBorderMiddle";
+			}
+		},
+
+		// sets the side menu border active color
+		pokedexMenuColor(value) {
+			var color = "";
+			this.pokedexMenu.forEach(function() {
+				if (value === this.pokedexId) {
+					color = "primary"
+				} else {
+					color = "grey"
+				}
+			}, this)
+			return color
+		},
+
+		// sets the side menu group border active color
+		pokedexMenuGroupColor(child) {
+			var color = false
+			child.forEach(function(item) {
+				if (item.path === this.pokedexId) {
+					color = true
+				}
+			}, this)
+			return color
+		},
+
+		// capitalizes the first letter of a word
 		capitalize(string) {
 			return string.charAt(0).toUpperCase() + string.slice(1);
 		},
 
+		// axios
 		getPokedex() {
 			axios
 				.get(`https://pokeapi.co/api/v2/pokedex/?limit=30`)
@@ -338,10 +297,12 @@ export default {
 	},
 
 	watch: {
+		// scrolls to the top of the page if the page number changes
 		page() {
 			window.scrollTo({ top: 0 });
 		},
 
+		// checks if the current page is larger then the avalible pages
 		numberShown() {
 			if (this.page > this.pageNumbers) {
 				return this.page = this.pageNumbers
@@ -358,5 +319,29 @@ export default {
 <style>
 .custom-tooltip {
 	opacity: 1 !important;
+}
+
+/* pokedex menu borders */
+.pokedexMenuBorderSolo {
+	height: 32px;
+}
+
+.pokedexMenuBorderStart {
+	height: 40px;
+	border-bottom: 8px solid #9E9E9E !important;
+	display: flex;
+	align-self: flex-end;
+}
+
+.pokedexMenuBorderMiddle {
+	height: 48px;
+	border: 8px 0px solid #9E9E9E !important;
+}
+
+.pokedexMenuBorderEnd {
+	height: 40px;
+	border-top: 8px solid #9E9E9E !important;
+	display: flex;
+	align-self: flex-start;
 }
 </style>
