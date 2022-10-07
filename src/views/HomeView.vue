@@ -3,11 +3,11 @@
 	<v-app-bar>
 		<v-app-bar-nav-icon @click="drawer = true" />
 
-		<v-toolbar-title v-if="loadedMonData">{{ capitalize(getMonData.name).replace("-", " ").replace("Letsgo", "Let's Go") }} Pokedex</v-toolbar-title>
+		<v-toolbar-title v-if="loadedMonData">{{ titleText(getMonData.name) }}  Pokedex</v-toolbar-title>
 		
 		<v-spacer/>
 
-		<v-menu dark offset-y>
+		<v-menu dark left>
 			<template #activator="{ on, attrs }">
 				<v-btn
 					color="primary"
@@ -15,16 +15,22 @@
 					v-bind="attrs"
 					v-on="on"
 				>
-					Pokemon Shown
+					<v-icon>mdi-cog</v-icon>
 				</v-btn>
 			</template>
-			<v-list>
+			<v-list class="pt-0">
+				<v-card tile color="primary" class="py-2 px-4">
+					<v-list-item-title>Pokemon shown</v-list-item-title>
+				</v-card>
 				<v-list-item
 					v-for="(item, index) in 4"
 					:key="'menu ' + index"
 					@click="numberShown = item * 5"
 				>
 					<v-list-item-title>{{ item * 5 }}</v-list-item-title>
+					<v-list-item-icon v-if="numberShown === (item * 5)" class="my-3">
+						<v-icon color="primary">mdi-chevron-left</v-icon>
+					</v-list-item-icon>
 				</v-list-item>
 
 				<v-row class="align-center">
@@ -64,7 +70,7 @@
 						page = 1;
 					"
 				>
-					<v-card tile flat width="3px" class="ml-1 mr-5"
+					<v-card tile flat width="3px" class="ml-1 mr-5 customTransition"
 						:color="pokedexMenuColor(pokedex.path)"
 						:class="menuList[index - 1] ? 'pokedexMenuBorderStart' : pokedexMenuBorder(index)"
 					/>
@@ -72,7 +78,7 @@
 				</v-list-item>
 				<v-list-group v-if="pokedex.child" v-model="menuList[index]">
 					<template #activator>
-						<v-card tile flat width="3px" class="ml-1 mr-5"
+						<v-card tile flat width="3px" class="ml-1 mr-5 customTransition"
 							:color="pokedexMenuGroupColor(pokedex.child) ? 'primary' : 'grey'"
 							:class="menuList[index - 1] ? 'pokedexMenuBorderStart' : (menuList[index] ? 'pokedexMenuBorderEnd' : pokedexMenuBorder(index))"
 						/>
@@ -89,7 +95,7 @@
 							page = 1;
 						"
 					>
-						<v-card tile flat class="ml-2 mr-6" width="3px"
+						<v-card tile flat width="3px" class="ml-2 mr-6 customTransition"
 							:color="pokedexMenuColor(child.path)"
 							:class="pokedexMenuBorder(index, indexChild)"
 						/>
@@ -114,19 +120,21 @@
 	</v-row>
 
 	<v-footer fixed>
-		<v-divider/>
+		<v-divider />
 		<v-pagination
 			v-model="page"
 			:length="pageNumbers"
 			:total-visible="7"
 		/>
-		<v-divider/>
+		<v-divider />
 	</v-footer>
 </v-card>
 </template>
 
 <script>
 import axios from "axios";
+
+// components
 import PokemonContainer from "@/components/PokemonContainer.vue";
 
 export default {
@@ -226,6 +234,25 @@ export default {
 	},
 
 	methods: {
+		// formats the title text
+		titleText(name) {
+			if (name.includes("-")) {
+				var splitName = name.toLowerCase().split("-");
+				for (var i = 0; i < splitName.length; i++) {
+					if (splitName[i] === "letsgo") {
+						splitName[i] = "let's Go";
+					}
+					if (splitName[i] !== "of") {
+						splitName[i] = splitName[i].charAt(0).toUpperCase() + splitName[i].slice(1);
+					}
+				}
+				name = splitName.join(" ");
+			} else {
+				name = name.charAt(0).toUpperCase() + name.slice(1);
+			}
+			return name;
+		},
+
 		// sets the side menu borders based on first/last item
 		pokedexMenuBorder(index, indexChild) {
 			if (index !== undefined) {
@@ -239,7 +266,7 @@ export default {
 					return "pokedexMenuBorderMiddle";
 				}
 			} else {
-				return ""
+				return "";
 			}
 		},
 
@@ -248,28 +275,23 @@ export default {
 			var color = "";
 			this.pokedexMenu.forEach(function() {
 				if (value === this.pokedexId) {
-					color = "primary"
+					color = "primary";
 				} else {
-					color = "grey"
+					color = "grey";
 				}
 			}, this)
-			return color
+			return color;
 		},
 
 		// sets the side menu group border active color
 		pokedexMenuGroupColor(child) {
-			var color = false
+			var color = false;
 			child.forEach(function(item) {
 				if (item.path === this.pokedexId) {
-					color = true
+					color = true;
 				}
 			}, this)
-			return color
-		},
-
-		// capitalizes the first letter of a word
-		capitalize(string) {
-			return string.charAt(0).toUpperCase() + string.slice(1);
+			return color;
 		},
 
 		// axios
@@ -307,7 +329,7 @@ export default {
 		// checks if the current page is larger then the avalible pages
 		numberShown() {
 			if (this.page > this.pageNumbers) {
-				return this.page = this.pageNumbers
+				return this.page = this.pageNumbers;
 			}
 		}
 	},
@@ -329,10 +351,6 @@ export default {
 	border-bottom: 8px solid #9E9E9E !important;
 	display: flex;
 	align-self: flex-end;
-	-moz-transition: height 0.3s ease;
-  -webkit-transition: height 0.3s ease;
-  -o-transition: height 0.3s ease;
-  transition: height 0.3s ease;
 }
 
 .pokedexMenuBorderMiddle {
@@ -341,10 +359,6 @@ export default {
 	border-top: 8px solid #9E9E9E !important;
 	display: flex;
 	align-self: flex-start;
-	-moz-transition: height 0.3s ease;
-  -webkit-transition: height 0.3s ease;
-  -o-transition: height 0.3s ease;
-  transition: height 0.3s ease;
 }
 
 .pokedexMenuBorderEnd {
@@ -352,9 +366,13 @@ export default {
 	border-top: 8px solid #9E9E9E !important;
 	display: flex;
 	align-self: flex-start;
+}
+
+/* add transition */
+.customTransition {
 	-moz-transition: height 0.3s ease;
-  -webkit-transition: height 0.3s ease;
-  -o-transition: height 0.3s ease;
-  transition: height 0.3s ease;
+	-webkit-transition: height 0.3s ease;
+	-o-transition: height 0.3s ease;
+	transition: height 0.3s ease;
 }
 </style>

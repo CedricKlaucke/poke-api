@@ -1,7 +1,7 @@
 <template>
-<v-card outlined shaped min-height="334" class="overflow-hidden ma-4">
+<v-card outlined shaped class="overflow-hidden ma-4">
 	<v-row no-gutters>
-		<v-col cols="8" min-height="334">
+		<v-col cols="12" sm="8">
 			<v-row no-gutters height="64">
 				<v-card-title>{{ pokemon.entry_number }} - {{ capitalize(pokemon.pokemon_species.name).replace("Nidoran-f", "Nidoran ♀").replace("Nidoran-m", "Nidoran ♂").replace("Tapu-", "Tapu ") }}</v-card-title>
 
@@ -19,14 +19,14 @@
 			<v-divider/>
 
 			<v-row class="ma-2" v-if="loadedMonData">
-				<v-col cols="6" v-for="stats in getMonData.stats" :key="stats.stat.name[pokemon.pokemon_species.name]">
-					{{ capitalize(stats.stat.name).replace("-", " ") }}: {{ stats.base_stat }}
-				</v-col>
 				<v-col cols="6">
 					Height: {{ getMonData.height / 10 }}m
 				</v-col>
 				<v-col cols="6">
 					Weight: {{ getMonData.weight / 10 }}kg
+				</v-col>
+				<v-col cols="6" v-for="stats in getMonData.stats" :key="stats.stat.name[pokemon.pokemon_species.name]">
+					{{ capitalize(stats.stat.name).replace("-", " ") }}: {{ stats.base_stat }}
 				</v-col>
 			</v-row>
 			<v-btn @click="expand = !expand" tile class="mt-2">Show {{ expand ? "less" : "more" }} info</v-btn>
@@ -34,8 +34,8 @@
 
 		<v-divider vertical/>
 
-		<v-col cols="4" v-if="loadedMonData">
-			<v-card tile class="pokemonImg">
+		<v-col cols="12" sm="4" v-if="loadedMonData">
+			<v-card tile min-height="334" class="pokemonImg">
 				<v-img v-if="!pokemonImgBack && !pokemonImgShiny" :src="getMonData.sprites.front_default"/>
 				<v-img v-if="pokemonImgBack && !pokemonImgShiny" :src="getMonData.sprites.back_default"/>
 				<v-img v-if="!pokemonImgBack && pokemonImgShiny" :src="getMonData.sprites.front_shiny"/>
@@ -79,13 +79,13 @@
 
 	<v-expand-transition>
 		<v-expansion-panels accordion v-show="expand">
-			<v-expansion-panel/>
+			<v-expansion-panel />
 
 			<v-expansion-panel>
 				<v-expansion-panel-header>Abilities</v-expansion-panel-header>
 				<v-expansion-panel-content>
 					<v-row v-if="loadedMonData">
-						<v-col cols="6" v-for="abilities in getMonData.abilities" :key="abilities.ability.name[pokemon.entry_number]">
+						<v-col cols="12" sm="6" v-for="abilities in getMonData.abilities" :key="abilities.ability.name[pokemon.entry_number]">
 							<AbilityContainer
 								:abilityId="Number(abilities.ability.url.slice(34, -1))"
 							/>
@@ -98,7 +98,7 @@
 				<v-expansion-panel-header>Available moves</v-expansion-panel-header>
 				<v-expansion-panel-content>
 					<v-row v-if="loadedMonData">
-						<v-col cols="4" v-for="moves in getMonData.moves" :key="moves[pokemon.entry_number]">
+						<v-col cols="12" sm="4" v-for="moves in getMonData.moves" :key="moves[pokemon.entry_number]">
 							<MoveContainer
 								:moveId="Number(moves.move.url.slice(31, -1))"
 							/>
@@ -113,6 +113,8 @@
 
 <script>
 import axios from "axios"
+
+// components
 import MoveContainer from "@/components/MoveContainer.vue";
 import AbilityContainer from "@/components/AbilityContainer.vue";
 
@@ -124,25 +126,22 @@ export default {
 		pokemonImgBack: false,
 		pokemonImgShiny: false,
 
-		// axios
+		// axios placeholders
 		getMonData: null,
 		loadedMonData: false,
 	}),
-
-	props: {
-		pokemonId: Number,
-		pokemon: Object,
-	},
 
 	beforeMount() {
 		this.getPokemon();
 	},
 
 	methods: {
+		// capitalizes the first letter of a word
 		capitalize(string) {
 			return string.charAt(0).toUpperCase() + string.slice(1);
 		},
 
+		// axios
 		getPokemon() {
 			axios
 				.get(`https://pokeapi.co/api/v2/pokemon/${this.pokemonId}/`)
@@ -154,6 +153,11 @@ export default {
 					console.error(error);
 				});
 		}
+	},
+
+	props: {
+		pokemonId: Number,
+		pokemon: Object,
 	},
 	
 	components: {
