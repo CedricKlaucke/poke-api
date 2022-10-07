@@ -29,7 +29,7 @@
 					Weight: {{ getMonData.weight / 10 }}kg
 				</v-col>
 			</v-row>
-			<v-btn @click="expand = !expand" tile class="pokemonShowBtn">Show {{ expand ? "less" : "more" }} info</v-btn>
+			<v-btn @click="expand = !expand" tile class="mt-2">Show {{ expand ? "less" : "more" }} info</v-btn>
 		</v-col>
 
 		<v-divider vertical/>
@@ -43,7 +43,7 @@
 				<v-row no-gutters class="pokemonImgBtn">
 					<v-col cols="2">
 						<v-tooltip right>
-							<template v-slot:activator="{ on, attrs }">
+							<template #activator="{ on, attrs }">
 								<v-btn tile block class="rounded-br-xl"
 									@click="pokemonImgBack = !pokemonImgBack"
 									v-bind="attrs"
@@ -60,7 +60,7 @@
 
 					<v-col cols="2">
 						<v-tooltip left>
-							<template v-slot:activator="{ on, attrs }">
+							<template #activator="{ on, attrs }">
 								<v-btn tile block class="rounded-bl-xl"
 									@click="pokemonImgShiny = !pokemonImgShiny"
 									v-bind="attrs"
@@ -172,11 +172,6 @@ export default {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-}
-
-.pokemonShowBtn {
-	position: absolute !important;
-	top: 280px;
+	width: 101%;
 }
 </style>

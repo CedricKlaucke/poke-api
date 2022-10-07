@@ -1,19 +1,14 @@
 <template>
 <v-card dark tile class="pb-16 fill-width fill-height">
 	<v-app-bar>
-		<v-tooltip right color="primary" content-class="custom-tooltip">
-			<template v-slot:activator="{ on, attrs }">
-				<v-app-bar-nav-icon @click="drawer = true" v-bind="attrs" v-on="on" />
-			</template>
-			<span>Change Pokedex</span>
-		</v-tooltip>
+		<v-app-bar-nav-icon @click="drawer = true" />
 
 		<v-toolbar-title v-if="loadedMonData">{{ capitalize(getMonData.name).replace("-", " ").replace("Letsgo", "Let's Go") }} Pokedex</v-toolbar-title>
 		
 		<v-spacer/>
 
 		<v-menu dark offset-y>
-			<template v-slot:activator="{ on, attrs }">
+			<template #activator="{ on, attrs }">
 				<v-btn
 					color="primary"
 					dark
@@ -52,11 +47,13 @@
 	<v-navigation-drawer
 		v-model="drawer"
 		absolute
-		bottom
 		temporary
 	>
-
 		<v-list shaped v-if="loadedDexData">
+			<div class="d-flex justify-center"><h2>Pokedex</h2></div>
+
+			<v-divider class="ma-2 mr-1" />
+
 			<div v-for="(pokedex, index) in pokedexMenu" :key="'menu ' + pokedex.name">
 				<v-list-item
 					v-if="pokedex.path"
@@ -69,22 +66,22 @@
 				>
 					<v-card tile flat width="3px" class="ml-1 mr-5"
 						:color="pokedexMenuColor(pokedex.path)"
-						:class="pokedexMenuBorder(index)"
+						:class="menuList[index - 1] ? 'pokedexMenuBorderStart' : pokedexMenuBorder(index)"
 					/>
 					<v-list-item-title>{{ pokedex.name }}</v-list-item-title>
 				</v-list-item>
-				<v-list-group v-if="pokedex.child" :value="false">
+				<v-list-group v-if="pokedex.child" v-model="menuList[index]">
 					<template #activator>
 						<v-card tile flat width="3px" class="ml-1 mr-5"
 							:color="pokedexMenuGroupColor(pokedex.child) ? 'primary' : 'grey'"
-							:class="pokedexMenuBorder(index)"
+							:class="menuList[index - 1] ? 'pokedexMenuBorderStart' : (menuList[index] ? 'pokedexMenuBorderEnd' : pokedexMenuBorder(index))"
 						/>
 						<v-list-item-content>
 							<v-list-item-title>{{ pokedex.name }}</v-list-item-title>
 						</v-list-item-content>
 					</template>
 					<v-list-item
-						v-for="(child, indexChild) in pokedex.child" :key="'menu' + child.name"
+						v-for="(child, indexChild) in pokedex.child" :key="'menu ' + child.name"
 						@click="
 							pokedexId = child.path;		// sets the ID for the pokedex
 							getPokemon();							// update axios
@@ -105,7 +102,7 @@
 
 	<v-row>
 		<v-spacer/>
-		<v-col cols="10" v-if="loadedMonData">
+		<v-col cols="12" sm="8" v-if="loadedMonData">
 			<PokemonContainer
 				v-for="pokemon in getMonData.pokemon_entries.slice(startSlice, endSlice)"
 				:key="pokemon.pokemon_species.name"
@@ -145,6 +142,7 @@ export default {
 		pokedexId: 1,
 
 		// pokedex menu data
+		menuList: [],
 		pokedexMenu: [
 			{ name: "National", path: 1 },
 			{ name: "Kanto", child: [
@@ -193,10 +191,10 @@ export default {
 				{ name: "Updated Poni", path: 25 },
 			]},
 			{ name: "Galar", path: 27 },
+			{ name: "Hisui", path: 30 },
 			{ name: "Conquest Gallery", path: 11 },
 			{ name: "Isle of Armor", path: 28 },
 			{ name: "Crown Tundra", path: 29 },
-			{ name: "Hisui", path: 30 },
 		],
 		
 		// axios placeholders
@@ -230,14 +228,18 @@ export default {
 	methods: {
 		// sets the side menu borders based on first/last item
 		pokedexMenuBorder(index, indexChild) {
-			if (indexChild !== undefined ? this.pokedexMenu[index].child.length === 1 : this.pokedexMenu.length === 1) {
-				return "pokedexMenuBorderSolo";
-			} else if (indexChild !== undefined ? indexChild === 0 : index === 0) {
-				return "pokedexMenuBorderStart";
-			} else if (indexChild !== undefined ? indexChild === this.pokedexMenu[index].child.length - 1 : index === this.pokedexMenu.length - 1) {
-				return "pokedexMenuBorderEnd";
+			if (index !== undefined) {
+				if ((indexChild !== undefined) ? (this.pokedexMenu[index].child.length === 1) : (this.pokedexMenu.length === 1)) {
+					return "pokedexMenuBorderSolo";
+				} else if ((indexChild !== undefined) ? (indexChild === 0) : (index === 0)) {
+					return "pokedexMenuBorderStart";
+				} else if ((indexChild !== undefined) ? (indexChild === this.pokedexMenu[index].child.length - 1) : (index === this.pokedexMenu.length - 1)) {
+					return "pokedexMenuBorderEnd";
+				} else {
+					return "pokedexMenuBorderMiddle";
+				}
 			} else {
-				return "pokedexMenuBorderMiddle";
+				return ""
 			}
 		},
 
@@ -316,11 +318,7 @@ export default {
 }
 </script>
 
-<style>
-.custom-tooltip {
-	opacity: 1 !important;
-}
-
+<style scoped>
 /* pokedex menu borders */
 .pokedexMenuBorderSolo {
 	height: 32px;
@@ -331,11 +329,22 @@ export default {
 	border-bottom: 8px solid #9E9E9E !important;
 	display: flex;
 	align-self: flex-end;
+	-moz-transition: height 0.3s ease;
+  -webkit-transition: height 0.3s ease;
+  -o-transition: height 0.3s ease;
+  transition: height 0.3s ease;
 }
 
 .pokedexMenuBorderMiddle {
 	height: 48px;
-	border: 8px 0px solid #9E9E9E !important;
+	border-bottom: 8px solid #9E9E9E !important;
+	border-top: 8px solid #9E9E9E !important;
+	display: flex;
+	align-self: flex-start;
+	-moz-transition: height 0.3s ease;
+  -webkit-transition: height 0.3s ease;
+  -o-transition: height 0.3s ease;
+  transition: height 0.3s ease;
 }
 
 .pokedexMenuBorderEnd {
@@ -343,5 +352,9 @@ export default {
 	border-top: 8px solid #9E9E9E !important;
 	display: flex;
 	align-self: flex-start;
+	-moz-transition: height 0.3s ease;
+  -webkit-transition: height 0.3s ease;
+  -o-transition: height 0.3s ease;
+  transition: height 0.3s ease;
 }
 </style>
